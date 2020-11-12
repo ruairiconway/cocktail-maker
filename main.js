@@ -14,7 +14,7 @@ function createDrinkComponentArray(objectArray, targetKey) {
         }, {});
     // remove all null properties
     for (let propName in newArray) { 
-        if (newArray[propName] === null || newArray[propName] === undefined) {
+        if (newArray[propName] === null || newArray[propName] === undefined || newArray[propName] === "") {
           delete newArray[propName];
         }
       }
