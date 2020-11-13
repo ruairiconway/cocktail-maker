@@ -1,3 +1,7 @@
+.hidden {
+    display: none;
+}
+
 #drink-details {
     display: flex;
     justify-content: flex-start;

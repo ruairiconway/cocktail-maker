@@ -25,27 +25,36 @@
         </div>
 
         <!-- DRINK APP -->
-        <div class="app-display hidden">
-            <!-- CREATE
-            <div>
-                <form>
-                    <label for="ingredient-field">What are you working with?</label>
-                    <input type="text" name="ingredient-field">
-                    <input type="submit" value="create">
-                </form>
-            </div> -->
-
-            <!-- BROWSE -->
-            <div class="browse-container container hidden">
-                <form class="js-browse-input">
-                    <label for="alcohol-field">Filter by Alcohol</label>
-                    <input name="alcohol-field" type="text">
-                    <input type="submit" value="results">
-                </form>
-                <div class="js-browse-list">
-                </div>
-            </div> 
+        <!-- DO HIDDEN CLASS / NOT .EMPTY() -->
+        <div class="drink-container container hidden">
+            <div id="drink-name" class="js-drink-name">   
+            </div>
+            <div id="drink-details">
+                <ul class="drink-details-format js-drink-measure"></ul>
+                <ul class="drink-details-format js-drink-ingredient"></ul>
+            </div>
+            <div id="drink-instructions" class="js-drink-instructions">   
+            </div>
         </div>
+        <!-- CREATE
+        <div>
+            <form>
+                <label for="ingredient-field">What are you working with?</label>
+                <input type="text" name="ingredient-field">
+                <input type="submit" value="create">
+            </form>
+        </div> -->
+
+        <!-- BROWSE 
+        <div class="browse-container container hidden">
+            <form class="js-browse-input">
+                <label for="alcohol-field">Filter by Alcohol</label>
+                <input name="alcohol-field" type="text" required>
+                <input id="alcohol-field-submit" type="submit" value="results">
+            </form>
+            <div class="js-browse-list">
+            </div>
+        </div> -->
     </main>
     
     <footer>
