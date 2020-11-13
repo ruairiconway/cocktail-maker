@@ -23,19 +23,29 @@
             <button type="button" id="js-btn-random-drink">Random</button>
             <button type="button" id="js-btn-browse-drink">Browse</button>
         </div>
-        <!-- DRINK NAME -->
-        <div id="drink-name" class="js-drink-name hidden">   
+
+        <!-- DRINK APP -->
+        <div class="app-display hidden">
+            <!-- CREATE
+            <div>
+                <form>
+                    <label for="ingredient-field">What are you working with?</label>
+                    <input type="text" name="ingredient-field">
+                    <input type="submit" value="create">
+                </form>
+            </div> -->
+
+            <!-- BROWSE -->
+            <div class="browse-container container hidden">
+                <form class="js-browse-input">
+                    <label for="alcohol-field">Filter by Alcohol</label>
+                    <input name="alcohol-field" type="text">
+                    <input type="submit" value="results">
+                </form>
+                <div class="js-browse-list">
+                </div>
+            </div> 
         </div>
-        <!-- DRINK INGREDIENTS -->
-        <div id="drink-measure" class="hidden">
-            <ul class="js-drink-measure"></ul>
-        </div>
-        <div id="drink-ingredient" class="hidden">
-            <ul class="js-drink-ingredient"></ul>
-        </div>
-        <!-- DRINK INSTRUCTIONS -->
-        <div id="drink-instructions" class="js-drink-instructions hidden">   
-        </div> 
     </main>
     
     <footer>
