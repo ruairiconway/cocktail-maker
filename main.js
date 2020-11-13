@@ -1,5 +1,102 @@
 'use strict';
 
+
+// OBJECT ARRAY MANIPULATION FUNCTIONS
+
+function createDrinkComponentArray(objectArray, targetKey) {
+    // pull all key + values from objectArray with keys that include targetKey string
+    let newArray = Object.keys(objectArray).filter(function(e) {
+        return e.indexOf(targetKey) == 0;
+        }).reduce(function(newData, e) {
+        newData[e] = objectArray[e];
+        return newData;
+        }, {});
+    // remove all null properties
+    for (let propName in newArray) { 
+        if (newArray[propName] === null || newArray[propName] === undefined || newArray[propName] === "") {
+          delete newArray[propName];
+        }
+      }
+    // simplify newArray so it only includes key values (not keys)
+    newArray = Object.values(newArray);
+    return newArray
+}
+
+
+// GENERATE STRING FUNCTIONS
+
+function generateDrinkNameString(drink) {
+    // Create string for drink name
+    let name = drink.drinks[0].strDrink;
+    let nameString = `
+        <p>${name}</p>`;
+    return nameString
+}
+
+function generateDrinkIngredientString(ingredientList) {
+    let ingredientString = ''
+    for (let i = 0; i < ingredientList.length; i++) {
+        let addIngredient = `
+            <li>${ingredientList[i]}</li>`;
+        ingredientString += addIngredient;
+    }
+    return ingredientString
+}
+
+function generateDrinkInstructionString(drink) {
+    let instructionRaw = drink.drinks[0].strInstructions;
+    let instruction = instructionRaw.split('.');
+    let instructionString = ``;
+    for (let i = 0; i < instruction.length; i++) {
+        let item = `
+            <p>${instruction[i]}</p>`;
+        instructionString += item;
+    }
+    return instructionString
+}
+
+
+// FORM HANDLERS
+function watchBrowseForm() {
+    $('.app-display').submit(event => {
+        event.preventDefault();
+        console.log('connected');
+    });
+}
+
+
+// DISPLAY FUNCTIONS
+
+function displayDrinkName(drink) {
+    // Display drink name
+    let nameString = generateDrinkNameString(drink);
+    $('.js-drink-name').html(nameString);
+}
+
+function displayDrinkMeasure(drink) {
+    // Display drink measure
+    let drinkData = drink.drinks[0];
+    let targetKey = 'strMeasure';
+    let measureList = createDrinkComponentArray(drinkData, targetKey);
+    let measureString = generateDrinkIngredientString(measureList);
+    $('.js-drink-measure').html(measureString);
+}
+
+function displayDrinkIngredient(drink) {
+    // Display drink ingredient
+    let drinkData = drink.drinks[0];
+    let targetKey = 'strIngredient';
+    let ingredientList = createDrinkComponentArray(drinkData, targetKey);
+    let ingredientString = generateDrinkIngredientString(ingredientList);
+    $('.js-drink-ingredient').html(ingredientString);
+}
+
+function displayDrinkInstructions(drink) {
+    let instructionString = generateDrinkInstructionString(drink);
+    $('.js-drink-instructions').html(instructionString);
+}
+
+
 // DISPLAY HANDLERS
 // ======================= DRINK STRUCTURE
 function displayDrink(drink) {
@@ -11,6 +108,7 @@ function displayDrink(drink) {
     displayDrinkIngredient(drink);
     displayDrinkInstructions(drink);
 }
+
 
 // API FETCH FUNCTIONS
 // ======================= RANDOM
