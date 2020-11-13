@@ -1,0 +1,10 @@
+#drink-details {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.drink-details-format {
+    list-style-type: none;
+    padding-left: 20px;
+}
