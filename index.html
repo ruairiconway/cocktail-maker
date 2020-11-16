@@ -18,24 +18,15 @@
     </header>
 
     <main>
-        <div>
-            <button type="button" id="js-btn-create-drink">Create</button>
-            <button type="button" id="js-btn-random-drink">Random</button>
-            <button type="button" id="js-btn-browse-drink">Browse</button>
-        </div>
+        <nav>
+            <input type="button" id="js-btn-create-drink" class="nav-button" value="Create">
+            <input type="button" id="js-btn-random-drink" class="nav-button" value="Random">
+            <input type="button" id="js-btn-browse-drink" class="nav-button" value="Browse">
+        </nav>
 
-        <!-- DRINK APP -->
-        <!-- DO HIDDEN CLASS / NOT .EMPTY() -->
-        <div class="drink-container container hidden">
-            <div id="drink-name" class="js-drink-name">   
-            </div>
-            <div id="drink-details">
-                <ul class="drink-details-format js-drink-measure"></ul>
-                <ul class="drink-details-format js-drink-ingredient"></ul>
-            </div>
-            <div id="drink-instructions" class="js-drink-instructions">   
-            </div>
-        </div>
+        <!-- DRINK RECIPE -->
+        <div class="drink-container container"></div>
+        
         <!-- CREATE
         <div>
             <form>
@@ -46,15 +37,7 @@
         </div> -->
 
         <!-- BROWSE -->
-        <div class="browse-container container hidden">
-            <form class="js-browse-input">
-                <label for="alcohol-field">Filter by Alcohol</label>
-                <input name="alcohol-field" type="text" required>
-                <input id="alcohol-field-submit" type="submit" value="results">
-            </form>
-            <div class="js-browse-list">
-            </div>
-        </div>
+        <div class="browse-container container"></div>
     </main>
     
     <footer>
