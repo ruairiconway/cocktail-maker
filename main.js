@@ -1,6 +1,7 @@
 'use strict';
 
 
+
 // OBJECT ARRAY MANIPULATION FUNCTIONS
 
 function createDrinkComponentArray(objectArray, targetKey) {
@@ -22,8 +23,33 @@ function createDrinkComponentArray(objectArray, targetKey) {
     return newArray
 }
 
+function createBrowseFilterArray(filters) {
+    let filterObject = filters.drinks;
+    let newArray = [];
+    for (let i = 0; i < filterObject.length; i++) {
+        let item = Object.values(filterObject[i]);
+        newArray.push(`${item}`);
+    }
+    newArray.sort();
+    return newArray
+}
+
 
 // GENERATE STRING FUNCTIONS
+
+function generateDrinkHTMLString() {
+    let structureString = `
+    <div id="drink-name" class="js-drink-name">   
+        </div>
+        <div id="drink-details">
+            <ul class="drink-details-format js-drink-measure"></ul>
+            <ul class="drink-details-format js-drink-ingredient"></ul>
+        </div>
+        <div id="drink-instructions">
+            <ol class="js-drink-instructions"></ol>  
+        </div>`;
+    return structureString;
+}
 
 function generateDrinkNameString(drink) {
     // Create string for drink name
@@ -47,25 +73,43 @@ function generateDrinkInstructionString(drink) {
     let instructionRaw = drink.drinks[0].strInstructions;
     let instruction = instructionRaw.split('.');
     let instructionString = ``;
-    for (let i = 0; i < instruction.length; i++) {
+    for (let i = 0; i < instruction.length - 1; i++) { //(-1 prevents empty additional <li>)
         let item = `
-            <p>${instruction[i]}</p>`;
+            <li>${instruction[i]}</li>`;
         instructionString += item;
     }
     return instructionString
 }
 
 
-// FORM HANDLERS
-function watchBrowseForm() {
-    $('.app-display').submit(event => {
-        event.preventDefault();
-        console.log('connected');
-    });
+function generateBrowseHTMLString() {
+    let structureString = `
+    <div class="js-filter-list">
+    </div>`;
+    return structureString
+}
+
+function generateBrowseFilterString(filterArray) {
+    let filterString = '';
+    for (let i = 0; i < filterArray.length; i++) {
+        let item = `
+        <div class="filter-item">
+            <input type="button" class="filter-button js-filter-button" value="${filterArray[i]}">
+        </div>`;
+        filterString += item;
+    }
+    filterString = filterString.toLowerCase();
+    return filterString;
 }
 
 
 // DISPLAY FUNCTIONS
+// ======================= DRINK DISPLAY
+
+function createDrinkHTML() {
+    let drinkHTML = generateDrinkHTMLString();
+    $('.drink-container').html(drinkHTML);
+}
 
 function displayDrinkName(drink) {
     // Display drink name
@@ -97,21 +141,47 @@ function displayDrinkInstructions(drink) {
 }
 
 
+function createBrowseHTML() {
+    let browseHTML = generateBrowseHTMLString();
+    $('.browse-container').html(browseHTML);
+}
+
+function displayBrowseFilters(filters) {
+    let filterArray = createBrowseFilterArray(filters);
+    let filterString = generateBrowseFilterString(filterArray);
+    $('.js-filter-list').html(filterString);
+}
+
+
 // DISPLAY HANDLERS
 // ======================= DRINK STRUCTURE
+function resetDisplay() {
+    $('.drink-container').empty();
+    $('.browse-container').empty();
+}
+
 function displayDrink(drink) {
     // Calls display functions for each section
     console.log(drink);
-    $('.drink-container').removeClass('hidden');
+    resetDisplay();
+    createDrinkHTML();
     displayDrinkName(drink);
     displayDrinkMeasure(drink);
     displayDrinkIngredient(drink);
     displayDrinkInstructions(drink);
 }
 
+function displayBrowse(filters) {
+    console.log(filters);
+    resetDisplay();
+    createBrowseHTML();
+    displayBrowseFilters(filters);
+    watchFilterChoice();
+}
+
 
 // API FETCH FUNCTIONS
-// ======================= RANDOM
+// ======================= RECIPE
 function getRandomDrink() {
     //get random drink from theCockatillDB.com
     let myHeaders = new Headers();
@@ -130,8 +200,30 @@ function getRandomDrink() {
     
 }
 
+function getBrowseFilters() {
+    let myHeaders = new Headers();
+    myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
+
+    let requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list", requestOptions)
+        .then(response => response.json())
+        .then(responseJson => displayBrowse(responseJson))
+        .catch(error => console.log('error', error));
+}
+
 
 // HANDLE USER INPUT FUNCTIONS
+
+function watchFilterChoice() {
+    $('.js-filter-button').on('click', function(){
+        getFilterIngredientList();
+    });
+}
 
 function userChoice() {
 
@@ -149,6 +241,7 @@ function userChoice() {
     // hit browse
     $('#js-btn-browse-drink').on('click', function(){
         console.log('Setting up browse');
+        getBrowseFilters();
     });
 }
 
