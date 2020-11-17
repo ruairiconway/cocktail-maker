@@ -135,20 +135,16 @@ function displayDrinkName(drink) {
     $('.js-drink-name').html(nameString);
 }
 
-function displayDrinkMeasure(drink) {
-    // Display drink measure
+function displayDrinkComponents(drink) {
     let drinkData = drink.drinks[0];
-    let targetKey = 'strMeasure';
-    let measureList = createDrinkComponentArray(drinkData, targetKey);
+    // Display drink measure list
+    let measureTargetKey = 'strMeasure';
+    let measureList = createDrinkComponentArray(drinkData, measureTargetKey);
     let measureString = generateDrinkComponentString(measureList);
     $('.js-drink-measure').html(measureString);
-}
-
-function displayDrinkIngredient(drink) {
-    // Display drink ingredient
-    let drinkData = drink.drinks[0];
-    let targetKey = 'strIngredient';
-    let ingredientList = createDrinkComponentArray(drinkData, targetKey);
+    // Display drink ingredients list
+    let ingredientTargetKey = 'strIngredient';
+    let ingredientList = createDrinkComponentArray(drinkData, ingredientTargetKey);
     let ingredientString = generateDrinkComponentString(ingredientList);
     $('.js-drink-ingredient').html(ingredientString);
 }
@@ -194,8 +190,7 @@ function displayDrink(drink) {
     resetDisplay();
     createDrinkHTML();
     displayDrinkName(drink);
-    displayDrinkMeasure(drink);
-    displayDrinkIngredient(drink);
+    displayDrinkComponents(drink);
     displayDrinkInstructions(drink);
 }
 
