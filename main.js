@@ -35,9 +35,10 @@ function createBrowseFilterArray(filters) {
 }
 
 
-// GENERATE STRING FUNCTIONS
-
+// ==============================  GENERATE STRING FUNCTIONS  ==================================
+// ------ drink
 function generateDrinkHTMLString() {
+    // base drink html
     let structureString = `
     <div id="drink-name" class="js-drink-name">   
         </div>
@@ -59,7 +60,8 @@ function generateDrinkNameString(drink) {
     return nameString
 }
 
-function generateDrinkIngredientString(ingredientList) {
+function generateDrinkComponentString(ingredientList) {
+    // Create string for drink ingredients list
     let ingredientString = ''
     for (let i = 0; i < ingredientList.length; i++) {
         let addIngredient = `
@@ -70,6 +72,7 @@ function generateDrinkIngredientString(ingredientList) {
 }
 
 function generateDrinkInstructionString(drink) {
+    // Create string for drink instructions list
     let instructionRaw = drink.drinks[0].strInstructions;
     let instruction = instructionRaw.split('.');
     let instructionString = ``;
@@ -81,8 +84,9 @@ function generateDrinkInstructionString(drink) {
     return instructionString
 }
 
-
+// ------ browse
 function generateBrowseHTMLString() {
+    // base browse html
     let structureString = `
     <div class="js-browse-list">
     </div>`;
@@ -117,10 +121,10 @@ function generateDrinkListString(drinkList) {
 }
 
 
-// DISPLAY FUNCTIONS
-// ======================= DRINK DISPLAY
-
+// ==============================  DISPLAY FUNCTIONS  ==================================
+// ------ drink
 function createDrinkHTML() {
+    // Create base HTML structure after resetDisplay()
     let drinkHTML = generateDrinkHTMLString();
     $('.drink-container').html(drinkHTML);
 }
@@ -136,7 +140,7 @@ function displayDrinkMeasure(drink) {
     let drinkData = drink.drinks[0];
     let targetKey = 'strMeasure';
     let measureList = createDrinkComponentArray(drinkData, targetKey);
-    let measureString = generateDrinkIngredientString(measureList);
+    let measureString = generateDrinkComponentString(measureList);
     $('.js-drink-measure').html(measureString);
 }
 
@@ -145,43 +149,47 @@ function displayDrinkIngredient(drink) {
     let drinkData = drink.drinks[0];
     let targetKey = 'strIngredient';
     let ingredientList = createDrinkComponentArray(drinkData, targetKey);
-    let ingredientString = generateDrinkIngredientString(ingredientList);
+    let ingredientString = generateDrinkComponentString(ingredientList);
     $('.js-drink-ingredient').html(ingredientString);
 }
 
 function displayDrinkInstructions(drink) {
+    // Display drink instructions
     let instructionString = generateDrinkInstructionString(drink);
     $('.js-drink-instructions').html(instructionString);
 }
 
-
+// ------ browse
 function createBrowseHTML() {
+    // Create base HTML structure after resetDisplay()
     let browseHTML = generateBrowseHTMLString();
     $('.browse-container').html(browseHTML);
 }
 
 function displayBrowseFilters(filters) {
+    // Display ingredient filters
     let filterArray = createBrowseFilterArray(filters);
     let filterString = generateBrowseFilterString(filterArray);
     $('.js-browse-list').html(filterString);
 }
 
 function displayFilterByIngredientList(drinkList) {
+    // Display drinks filtered by chosen ingredient
     let drinkListString =  generateDrinkListString(drinkList);
     $('.js-browse-list').html(drinkListString);
     watchFilterByIngredientChoice();
 }
 
 
-// DISPLAY HANDLERS
-// ======================= DRINK STRUCTURE
+// ==============================  DISPLAY HANDLERS  ==================================
+// ------ reset
 function resetDisplay() {
     $('.drink-container').empty();
     $('.browse-container').empty();
 }
 
+// ------ drink
 function displayDrink(drink) {
-    // Calls display functions for each section
     console.log(drink);
     resetDisplay();
     createDrinkHTML();
@@ -191,6 +199,7 @@ function displayDrink(drink) {
     displayDrinkInstructions(drink);
 }
 
+// ------ browse
 function displayBrowse(filters) {
     console.log(filters);
     resetDisplay();
@@ -200,10 +209,11 @@ function displayBrowse(filters) {
 }
 
 
-// API FETCH FUNCTIONS
-// ======================= RECIPE
+// ==============================  FETCH APIs  ==================================
+
+// ------ drinks
 function getRandomDrink() {
-    //get random drink from theCockatillDB.com
+    // get random drink from theCockatillDB.com
     let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
 
@@ -221,6 +231,7 @@ function getRandomDrink() {
 }
 
 function getDrinkByName(name) {
+    // get drink by name from theCockatillDB.com
     let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
 
@@ -236,7 +247,9 @@ function getDrinkByName(name) {
         .catch(error => console.log('error', error));
 }
 
+// ------ browse
 function getBrowseFilters() {
+    // get ingredient filters from theCockatillDB.com
     let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
 
@@ -253,7 +266,8 @@ function getBrowseFilters() {
 }
 
 
-function getFilterByIngredientList(filterChoice) {
+function getFilterDrinkList(filterChoice) {
+    // get drinks by ingredient filter from theCockatillDB.com
     let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
 
@@ -270,22 +284,26 @@ function getFilterByIngredientList(filterChoice) {
 }
 
 
-// HANDLE USER INPUT FUNCTIONS
+// ==============================  WATCH INPUT/FORM  ================================== 
 
+// ------ browse
 function watchFilterChoice() {
+    // browse ingredients
     $('.js-filter-button').on('click', function(){
         let filterChoice = $(this).val();
-        getFilterByIngredientList(filterChoice);
+        getFilterDrinkList(filterChoice);
     });
 }
 
 function watchFilterByIngredientChoice() {
+    // browse drinks
     $('.js-drink-button').on('click', function(){
         let drinkChoice = $(this).val();
         getDrinkByName(drinkChoice);
     });
 }
 
+// ------ nav
 function userChoice() {
     // hit create
     $('#js-btn-create-drink').on('click', function(){
