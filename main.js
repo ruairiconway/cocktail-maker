@@ -84,7 +84,7 @@ function generateDrinkInstructionString(drink) {
 
 function generateBrowseHTMLString() {
     let structureString = `
-    <div class="js-filter-list">
+    <div class="js-browse-list">
     </div>`;
     return structureString
 }
@@ -93,13 +93,27 @@ function generateBrowseFilterString(filterArray) {
     let filterString = '';
     for (let i = 0; i < filterArray.length; i++) {
         let item = `
-        <div class="filter-item">
+        <div class="browse-item">
             <input type="button" class="filter-button js-filter-button" value="${filterArray[i]}">
         </div>`;
         filterString += item;
     }
     filterString = filterString.toLowerCase();
     return filterString;
+}
+
+function generateDrinkListString(drinkList) {
+    console.log(drinkList);
+    let drinkListString = ``;
+    for (let i = 0; i < drinkList.drinks.length; i++) {
+        let item =`
+        <div class="browse-item">
+            <input type="button" class="drink-button js-drink-button" value="${drinkList.drinks[i].strDrink}">
+        </div>`
+        drinkListString += item;
+    }
+    drinkListString = drinkListString.toLowerCase();
+    return drinkListString;
 }
 
 
@@ -149,7 +163,13 @@ function createBrowseHTML() {
 function displayBrowseFilters(filters) {
     let filterArray = createBrowseFilterArray(filters);
     let filterString = generateBrowseFilterString(filterArray);
-    $('.js-filter-list').html(filterString);
+    $('.js-browse-list').html(filterString);
+}
+
+function displayFilterByIngredientList(drinkList) {
+    let drinkListString =  generateDrinkListString(drinkList);
+    $('.js-browse-list').html(drinkListString);
+    watchFilterByIngredientChoice();
 }
 
 
@@ -200,6 +220,22 @@ function getRandomDrink() {
     
 }
 
+function getDrinkByName(name) {
+    let myHeaders = new Headers();
+    myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
+
+    let requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`, requestOptions)
+        .then(response => response.json())
+        .then(responseJson => displayDrink(responseJson))
+        .catch(error => console.log('error', error));
+}
+
 function getBrowseFilters() {
     let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
@@ -217,27 +253,49 @@ function getBrowseFilters() {
 }
 
 
+function getFilterByIngredientList(filterChoice) {
+    let myHeaders = new Headers();
+    myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
+
+    let requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${filterChoice}`, requestOptions)
+        .then(response => response.json())
+        .then(responseJson => displayFilterByIngredientList(responseJson))
+        .catch(error => console.log('error', error));
+}
+
+
 // HANDLE USER INPUT FUNCTIONS
 
 function watchFilterChoice() {
     $('.js-filter-button').on('click', function(){
-        getFilterIngredientList();
+        let filterChoice = $(this).val();
+        getFilterByIngredientList(filterChoice);
+    });
+}
+
+function watchFilterByIngredientChoice() {
+    $('.js-drink-button').on('click', function(){
+        let drinkChoice = $(this).val();
+        getDrinkByName(drinkChoice);
     });
 }
 
 function userChoice() {
-
     // hit create
     $('#js-btn-create-drink').on('click', function(){
         console.log('creating a drink');
     });
-
     // hit random
     $('#js-btn-random-drink').on('click', function(){
         console.log('getting random drink');
         getRandomDrink();
     });
-
     // hit browse
     $('#js-btn-browse-drink').on('click', function(){
         console.log('Setting up browse');
