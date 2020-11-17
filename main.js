@@ -206,8 +206,8 @@ function buildCreateHTML() {
 function getRandomDrink() {
     // get random drink from theCockatillDB.com
     let myHeaders = new Headers();
-    myHeaders.append("x-api-key", "1");
-    myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
+    myHeaders.append("x-api-key", myApiKey);
+    myHeaders.append("Cookie", myCookie);
 
     let requestOptions = {
         method: 'GET',
@@ -225,8 +225,8 @@ function getRandomDrink() {
 function getDrinkByName(name) {
     // get drink by name from theCockatillDB.com
     let myHeaders = new Headers();
-    myHeaders.append("x-api-key", "1");
-    myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
+    myHeaders.append("x-api-key", myApiKey);
+    myHeaders.append("Cookie", myCookie);
 
     let requestOptions = {
         method: 'GET',
@@ -244,8 +244,8 @@ function getDrinkByName(name) {
 function getBrowseFilters() {
     // get ingredient filters from theCockatillDB.com
     let myHeaders = new Headers();
-    myHeaders.append("x-api-key", "1");
-    myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
+    myHeaders.append("x-api-key", myApiKey);
+    myHeaders.append("Cookie", myCookie);
 
     let requestOptions = {
         method: 'GET',
@@ -262,8 +262,8 @@ function getBrowseFilters() {
 function getFilterDrinkList(filterChoice) {
     // get drinks by ingredient filter from theCockatillDB.com
     let myHeaders = new Headers();
-    myHeaders.append("x-api-key", "1");
-    myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
+    myHeaders.append("x-api-key", myApiKey);
+    myHeaders.append("Cookie", myCookie);
 
     let requestOptions = {
         method: 'GET',
