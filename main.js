@@ -2,7 +2,7 @@
 
 
 
-// OBJECT ARRAY MANIPULATION FUNCTIONS
+// ==============================  JSON/OBJECT/ARRAY MANIPULATION  ==================================
 
 function createDrinkComponentArray(objectArray, targetKey) {
     // pull all key + values from objectArray with keys that include targetKey string
@@ -18,18 +18,20 @@ function createDrinkComponentArray(objectArray, targetKey) {
           delete newArray[propName];
         }
       }
-    // simplify newArray so it only includes key values (not keys)
+    // simplify newArray so it only includes key values
     newArray = Object.values(newArray);
     return newArray
 }
 
 function createBrowseFilterArray(filters) {
+    // simplify array so it only includes key values
     let filterObject = filters.drinks;
     let newArray = [];
     for (let i = 0; i < filterObject.length; i++) {
         let item = Object.values(filterObject[i]);
         newArray.push(`${item}`);
     }
+    //sort array alphabetically
     newArray.sort();
     return newArray
 }
