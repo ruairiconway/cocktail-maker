@@ -98,7 +98,7 @@ function generateDrinkInstructionString(drink) {
 function generateBrowseHTMLString() {
     // base browse html
     let structureString = `
-    <div class="js-browse-list">
+    <div class="browse-list js-browse-list">
     </div>`;
     return structureString
 }

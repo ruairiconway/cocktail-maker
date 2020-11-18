@@ -12,3 +12,10 @@
     list-style-type: none;
     padding-left: 20px;
 }
+
+.browse-list {
+    margin: 20px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
