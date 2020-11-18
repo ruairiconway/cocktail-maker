@@ -44,6 +44,15 @@ function getCreateDrink(createOptions) {
     getDrinkByName(options[i].strDrink);
 }
 
+function checkreturnedOptions(responseJson) {
+    let drinkOptionArray = responseJson.drinks;
+    if (drinkOptionArray === 'None Found') {
+        console.log('none');
+    } else {
+        console.log('found');
+    }
+}
+
 
 // ==============================  GENERATE STRING FUNCTIONS  ==================================
 // ------ drink
@@ -313,7 +322,14 @@ function getCreateDrinkOptions(ingredients) {
 
     fetch(`${cocktailProxy}/filter.php?i=${ingredients}`, requestOptions)
         .then(response => response.json())
-        .then(responseJson => getCreateDrink(responseJson))
+        .then(responseJson => {
+            if (responseJson.drinks === 'None Found') {
+                displayCreateError();
+                console.log('no drink found');
+            } else {
+                getCreateDrink(responseJson);
+            }
+        })
         .catch(error => {
             if (error = 'SyntaxError') {
                 displayCreateError();
@@ -321,7 +337,7 @@ function getCreateDrinkOptions(ingredients) {
             } else {
                 console.log('error', error);
             }
-    });
+        });
 }
 
 
@@ -335,7 +351,6 @@ function resetDisplay() {
 
 // ------ drink
 function displayDrink(drink) {
-    console.log(drink);
     resetDisplay();
     buildDrinkHTML();
     displayDrinkName(drink);
