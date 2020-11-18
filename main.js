@@ -226,6 +226,7 @@ function displayCreateError() {
 
 
 // ==============================  FETCH APIs  ==================================
+const apiProxy = 'https://stormy-hollows-90804.herokuapp.com/'
 // ------ drinks
 function getRandomDrink() {
     // get random drink from theCockatillDB.com
@@ -238,7 +239,8 @@ function getRandomDrink() {
         redirect: 'follow'
     };
 
-    fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php", requestOptions)
+    //fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php", requestOptions)
+    fetch(`${apiProxy}random.php`)
         .then(response => response.json())
         .then(responseJson => displayDrink(responseJson))
         .catch(error => console.log('error', error));
