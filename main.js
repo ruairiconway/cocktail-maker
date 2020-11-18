@@ -36,6 +36,14 @@ function createBrowseFilterArray(filters) {
     return newArray
 }
 
+// ------ create
+function getCreateDrink(createOptions) {
+    // pull random drink name from array
+    let options = createOptions.drinks;
+    let i = Math.floor(Math.random() * options.length);
+    getDrinkByName(options[i].strDrink);
+}
+
 
 // ==============================  GENERATE STRING FUNCTIONS  ==================================
 // ------ drink
@@ -128,14 +136,21 @@ function generateDrinkListString(drinkList) {
 function generateCreateHTMLString() {
     // base create html
     let createString = 
-    `<form id="js-create-form">
+    `<form id="js-create-form" autocomplete="off">
         <label for="ingredient-field" class="create-form-label">What are you working with?</label>
-        <input type="text" class="js-create-form-field" name="ingredient-field" required>
-        <input type="submit" class="js-create-form-submit" value="create">
-    </form>`;
+        <input type="text" class="js-create-form-field" id="js-create-form-field" name="ingredient-field" required>
+        <input type="submit" class="js-create-form-submit" value="go">
+    </form>
+    <div id="error-message"></div>`;
     return createString
 }
 
+function generateCreateErrorString() {
+    // error string for when no drinks are found
+    let errorString = `
+    <p>No drink was found with these ingredients, try again!</p>`;
+    return errorString
+}
 
 // ==============================  DISPLAY FUNCTIONS  ==================================
 // ------ drink
@@ -153,6 +168,7 @@ function displayDrinkName(drink) {
 
 function displayDrinkComponents(drink) {
     let drinkData = drink.drinks[0];
+    console.log(drinkData);
     // Display drink measure list
     let measureTargetKey = 'strMeasure';
     let measureList = createDrinkComponentArray(drinkData, measureTargetKey);
@@ -197,7 +213,15 @@ function buildCreateHTML() {
     // Create base HTML structure after resetDisplay()
     let createHTML = generateCreateHTMLString();
     $('.create-container').html(createHTML);
+    $('#js-create-form-field').focus();
     watchCreateForm();
+}
+
+function displayCreateError() {
+    // display error message when no drinks are found
+    console.log('connected');
+    let createError = generateCreateErrorString();
+    $('#error-message').html(createError);
 }
 
 
@@ -273,8 +297,29 @@ function getFilterDrinkList(filterChoice) {
         .catch(error => console.log('error', error));
 }
 
-function getCreateDrinkOptions(ingredientsArray) {
+// ------ create
+function getCreateDrinkOptions(ingredients) {
+    // get drinks by multiple ingredient filters from theCockatillDB.com
+    var myHeaders = new Headers();
+    myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
 
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredients}`, requestOptions)
+        .then(response => response.json())
+        .then(responseJson => getCreateDrink(responseJson))
+        .catch(error => {
+            if (error = 'SyntaxError') {
+                displayCreateError();
+                console.log('no drink found');
+            } else {
+                console.log('error', error);
+            }
+    });
 }
 
 
@@ -336,10 +381,11 @@ function watchFilterByIngredientChoice() {
 function watchCreateForm() {
     $('#js-create-form').submit(event => {
         event.preventDefault();
-        let ingredients = $('.js-create-form-field').val();
-        let ingredientsArray = ingredients.replaceAll(' ','').split(',');
-        console.log(`getting random drink using ${ingredientsArray}`);
-        getCreateDrinkOptions(ingredientsArray);
+        $('#error-message').empty();
+        let ingredientsInput = $('.js-create-form-field').val();
+        let ingredients = ingredientsInput.replaceAll(', ',',');
+        console.log(`getting random drink using ${ingredients}`);
+        getCreateDrinkOptions(ingredients);
     });
 }
 
