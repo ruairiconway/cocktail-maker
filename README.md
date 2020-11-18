@@ -1,9 +1,9 @@
-# shaken-or-stirred
+# Shaken-or-Stirred
 
 - live - https://ruairiconway.github.io/shaken-or-stirred/
 - code - https://github.com/ruairiconway/shaken-or-stirred
 
-## brief
+## Brief
 Thinkful Build - create an app that utilizes one or more APIs in an interesting way
 
 ## My Build
