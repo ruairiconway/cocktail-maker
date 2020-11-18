@@ -44,15 +44,6 @@ function getCreateDrink(createOptions) {
     getDrinkByName(options[i].strDrink);
 }
 
-function checkreturnedOptions(responseJson) {
-    let drinkOptionArray = responseJson.drinks;
-    if (drinkOptionArray === 'None Found') {
-        console.log('none');
-    } else {
-        console.log('found');
-    }
-}
-
 
 // ==============================  GENERATE STRING FUNCTIONS  ==================================
 // ------ drink
@@ -252,7 +243,6 @@ function getRandomDrink() {
     };
 
     fetch(`${cocktailProxy}/random.php`, requestOptions)
-    //fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php", requestOptions)
         .then(response => response.json())
         .then(responseJson => displayDrink(responseJson))
         .catch(error => console.log('error', error));
