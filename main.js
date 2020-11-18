@@ -258,7 +258,7 @@ function getDrinkByName(name) {
         redirect: 'follow'
     };
 
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`, requestOptions)
+    fetch(`${cocktailProxy}/search.php?s=${name}`, requestOptions)
         .then(response => response.json())
         .then(responseJson => displayDrink(responseJson))
         .catch(error => console.log('error', error));
@@ -276,7 +276,7 @@ function getBrowseFilters() {
         redirect: 'follow'
     };
 
-    fetch("https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list", requestOptions)
+    fetch(`${cocktailProxy}/list.php?i=list`, requestOptions)
         .then(response => response.json())
         .then(responseJson => displayBrowse(responseJson))
         .catch(error => console.log('error', error));
@@ -293,7 +293,7 @@ function getFilterDrinkList(filterChoice) {
         redirect: 'follow'
     };
 
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${filterChoice}`, requestOptions)
+    fetch(`${cocktailProxy}/filter.php?i=${filterChoice}`, requestOptions)
         .then(response => response.json())
         .then(responseJson => displayFilterByIngredientList(responseJson))
         .catch(error => console.log('error', error));
@@ -311,7 +311,7 @@ function getCreateDrinkOptions(ingredients) {
         redirect: 'follow'
     };
 
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredients}`, requestOptions)
+    fetch(`${cocktailProxy}/filter.php?i=${ingredients}`, requestOptions)
         .then(response => response.json())
         .then(responseJson => getCreateDrink(responseJson))
         .catch(error => {
