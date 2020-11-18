@@ -150,6 +150,9 @@ function generateCreateHTMLString() {
         <input type="text" class="js-create-form-field" id="js-create-form-field" name="ingredient-field" required>
         <input type="submit" class="js-create-form-submit" value="go">
     </form>
+    <div>
+        <p>enter multiple ingredients seperated by a ","</p>
+    </div>
     <div id="error-message"></div>`;
     return createString
 }
