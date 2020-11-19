@@ -470,3 +470,4 @@ function userChoice() {
 }
 
 $(userChoice);
+$(displayCreate);
