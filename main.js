@@ -51,14 +51,16 @@ function generateDrinkHTMLString() {
     // base drink html
     let structureString = `
     <div id="drink-name" class="js-drink-name">   
-        </div>
-        <div id="drink-details">
-            <ul class="drink-details-format js-drink-measure"></ul>
-            <ul class="drink-details-format js-drink-ingredient"></ul>
-        </div>
-        <div id="drink-instructions">
-            <ol class="js-drink-instructions"></ol>  
-        </div>`;
+    </div>
+    <div id="drink-details">
+        <ul class="drink-details-format js-drink-measure"></ul>
+        <ul class="drink-details-format js-drink-ingredient"></ul>
+    </div>
+    <div id="drink-glass" class="js-drink-glass">
+    </div>
+    <div id="drink-instructions">
+        <ol class="js-drink-instructions"></ol>  
+    </div>`;
     return structureString;
 }
 
@@ -66,7 +68,7 @@ function generateDrinkNameString(drink) {
     // Create string for drink name
     let name = drink.drinks[0].strDrink;
     let nameString = `
-        <p>${name}</p>`;
+        <h3>${name}</h3>`;
     return nameString
 }
 
@@ -79,6 +81,13 @@ function generateDrinkComponentString(ingredientList) {
         ingredientString += addIngredient;
     }
     return ingredientString
+}
+
+function generateDrinkGlassString(drink) {
+    let glassType = drink.drinks[0].strGlass;
+    let glassString = `
+        <p>${glassType}</p>`;
+    return glassString
 }
 
 function generateDrinkInstructionString(drink) {
@@ -98,7 +107,12 @@ function generateDrinkInstructionString(drink) {
 function generateBrowseHTMLString() {
     // base browse html
     let structureString = `
+    <div class="browse-header js-browse-header">
+        <p>Ingredients List</p>
+    </div>
     <div class="browse-list js-browse-list">
+    </div>
+    <div class="back-button js-back-button">
     </div>`;
     return structureString
 }
@@ -155,6 +169,26 @@ function generateCreateErrorString() {
     return errorString
 }
 
+function generateBrowseFilterHeader() {
+    let headerString = `
+    <h3>Ingredients List</h3>`;
+    return headerString
+}
+
+function generateBrowseDrinksHeader(filterChoice) {
+    let headerString = `
+    <h3>${filterChoice}</h3>`;
+    return headerString
+}
+
+function generateBackButtonString() {
+    let backButtonString = `
+    <div>
+        <input type=button value="back" id="back-button">
+    </div>`;
+    return backButtonString
+}
+
 // ==============================  DISPLAY FUNCTIONS  ==================================
 // ------ drink
 function buildDrinkHTML() {
@@ -184,6 +218,11 @@ function displayDrinkComponents(drink) {
     $('.js-drink-ingredient').html(ingredientString);
 }
 
+function displayDrinkGlass(drink) {
+    let glassString = generateDrinkGlassString(drink);
+    $('.js-drink-glass').html(glassString)
+}
+
 function displayDrinkInstructions(drink) {
     // Display drink instructions
     let instructionString = generateDrinkInstructionString(drink);
@@ -201,14 +240,20 @@ function displayBrowseFilters(filters) {
     // Display ingredient filters
     let filterArray = createBrowseFilterArray(filters);
     let filterString = generateBrowseFilterString(filterArray);
+    let filterHeader = generateBrowseFilterHeader();
     $('.js-browse-list').html(filterString);
+    $('.js-browse-header').html(filterHeader);
 }
 
-function displayFilterByIngredientList(drinkList) {
+function displayFilterDrinkList(drinkList, filterChoice) {
     // Display drinks filtered by chosen ingredient
     let drinkListString =  generateDrinkListString(drinkList);
+    let drinkListHeader = generateBrowseDrinksHeader(filterChoice);
+    let backButton = generateBackButtonString();
     $('.js-browse-list').html(drinkListString);
-    watchFilterByIngredientChoice();
+    $('.js-browse-header').html(drinkListHeader);
+    $('.js-back-button').html(backButton);
+    watchFilterDrinkChoice();
 }
 
 // ------ create
@@ -278,7 +323,8 @@ function getBrowseFilters() {
         redirect: 'follow'
     };
 
-    fetch(`${cocktailProxy}/list.php?i=list`, requestOptions)
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list`, requestOptions)
+    //fetch(`${cocktailProxy}/list.php?i=list`, requestOptions) <-- returns longer list of ingredients but some do not provide drink options when getFilterDrinkList() is called
         .then(response => response.json())
         .then(responseJson => displayBrowse(responseJson))
         .catch(error => console.log('error', error));
@@ -297,7 +343,7 @@ function getFilterDrinkList(filterChoice) {
 
     fetch(`${cocktailProxy}/filter.php?i=${filterChoice}`, requestOptions)
         .then(response => response.json())
-        .then(responseJson => displayFilterByIngredientList(responseJson))
+        .then(responseJson => displayFilterDrinkList(responseJson, filterChoice))
         .catch(error => console.log('error', error));
 }
 
@@ -348,6 +394,7 @@ function displayDrink(drink) {
     buildDrinkHTML();
     displayDrinkName(drink);
     displayDrinkComponents(drink);
+    displayDrinkGlass(drink);
     displayDrinkInstructions(drink);
 }
 
@@ -378,12 +425,16 @@ function watchFilterChoice() {
     });
 }
 
-function watchFilterByIngredientChoice() {
+function watchFilterDrinkChoice() {
     // browse drinks
     $('.js-drink-button').on('click', function(){
         console.log('getting selected drink');
         let drinkChoice = $(this).val();
         getDrinkByName(drinkChoice);
+    });
+    $('.js-back-button').on('click', function(){
+        console.log('setting up browse');
+        getBrowseFilters();
     });
 }
 
