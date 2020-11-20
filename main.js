@@ -379,6 +379,29 @@ function getCreateDrinkOptions(ingredients) {
         });
 }
 
+// ----- image
+const unsplashProxy = `https://damp-brushlands-32925.herokuapp.com/unsplash`;
+function getDrinkImageUrl(drink) {
+    let drinkName = drink.drinks[0].strDrink;
+    let drinkQuery = drinkName.replaceAll(' ','+');
+
+    console.log(drinkQuery);
+
+    var myHeaders = new Headers();
+    myHeaders.append("Accept-Version", "v1");
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    fetch(`${unsplashProxy}&query=${drinkQuery}&page=1&per_page=1&content_filter=low&color=black_and_white`, requestOptions)
+        .then(response => response.json())
+        .then(responseJson => console.log(responseJson))
+        .catch(error => console.log('error', error));
+}
+
 
 // ==============================  DISPLAY HANDLERS  ==================================
 // ------ reset
@@ -396,6 +419,7 @@ function displayDrink(drink) {
     displayDrinkComponents(drink);
     displayDrinkGlass(drink);
     displayDrinkInstructions(drink);
+    getDrinkImageUrl(drink);
 }
 
 // ------ browse
