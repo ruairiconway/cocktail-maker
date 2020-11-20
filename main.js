@@ -50,16 +50,20 @@ function getCreateDrink(createOptions) {
 function generateDrinkHTMLString() {
     // base drink html
     let structureString = `
-    <div id="drink-name" class="js-drink-name">   
+    <div class="drink-breakdown">
+        <div id="drink-name" class="js-drink-name">   
+        </div>
+        <div id="drink-details">
+            <ul class="drink-details-format js-drink-measure"></ul>
+            <ul class="drink-details-format js-drink-ingredient"></ul>
+        </div>
+        <div id="drink-glass" class="js-drink-glass">
+        </div>
+        <div id="drink-instructions">
+            <ol class="js-drink-instructions"></ol>  
+        </div>
     </div>
-    <div id="drink-details">
-        <ul class="drink-details-format js-drink-measure"></ul>
-        <ul class="drink-details-format js-drink-ingredient"></ul>
-    </div>
-    <div id="drink-glass" class="js-drink-glass">
-    </div>
-    <div id="drink-instructions">
-        <ol class="js-drink-instructions"></ol>  
+    <div class="drink-image js-drink-image hidden">
     </div>`;
     return structureString;
 }
@@ -84,6 +88,7 @@ function generateDrinkComponentString(ingredientList) {
 }
 
 function generateDrinkGlassString(drink) {
+    // Create string for drink glass detail
     let glassType = drink.drinks[0].strGlass;
     let glassString = `
         <p>${glassType}</p>`;
@@ -146,6 +151,29 @@ function generateDrinkListString(drinkList) {
     return drinkListString;
 }
 
+function generateBrowseFilterHeader() {
+    // Header string for browse ingredient list
+    let headerString = `
+    <h3>Ingredients List</h3>`;
+    return headerString
+}
+
+function generateBrowseDrinksHeader(filterChoice) {
+    // Header string for browse drink list
+    let headerString = `
+    <h3>${filterChoice}</h3>`;
+    return headerString
+}
+
+function generateBackButtonString() {
+    let backButtonString = `
+    <div>
+        <input type=button value="back" id="back-button">
+    </div>`;
+    return backButtonString
+}
+
+
 // ------ create
 function generateCreateHTMLString() {
     // base create html
@@ -169,25 +197,15 @@ function generateCreateErrorString() {
     return errorString
 }
 
-function generateBrowseFilterHeader() {
-    let headerString = `
-    <h3>Ingredients List</h3>`;
-    return headerString
+
+// ----- image
+function generateImageString(imageURL,imageAlt,imageSpecs) {
+    //create string to go in image-container
+    let imageString = `
+    <img src="${imageURL}${imageSpecs}" alt="${imageAlt}">`;
+    return imageString
 }
 
-function generateBrowseDrinksHeader(filterChoice) {
-    let headerString = `
-    <h3>${filterChoice}</h3>`;
-    return headerString
-}
-
-function generateBackButtonString() {
-    let backButtonString = `
-    <div>
-        <input type=button value="back" id="back-button">
-    </div>`;
-    return backButtonString
-}
 
 // ==============================  DISPLAY FUNCTIONS  ==================================
 // ------ drink
@@ -256,6 +274,7 @@ function displayFilterDrinkList(drinkList, filterChoice) {
     watchFilterDrinkChoice();
 }
 
+
 // ------ create
 function buildCreateHTML() {
     // Create base HTML structure after resetDisplay()
@@ -270,6 +289,16 @@ function displayCreateError() {
     console.log('connected');
     let createError = generateCreateErrorString();
     $('#error-message').html(createError);
+}
+
+
+// ----- image
+function displayDrinkImage(responseJson) {
+    console.log(responseJson);
+    let imageURL = responseJson.results[0].urls.regular;
+    let imageAlt = responseJson.results[0].alt_description;
+    let imageHTML = generateImageString(imageURL,imageAlt);
+    $('.js-drink-image').removeClass('hidden').html(imageHTML);
 }
 
 
@@ -387,16 +416,22 @@ function getDrinkImageUrl(drink) {
     let drinkName = drink.drinks[0].strDrink;
     let drinkQuery = drinkName.replaceAll(' ','+');
 
-    console.log(drinkQuery);
+    console.log(`fetching images using ${drinkQuery}`);
 
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
     };
-
-    fetch(`${unsplashProxy}?query=${drinkQuery}&page=1&per_page=1&content_filter=low&color=black_and_white`, requestOptions)
+    
+    fetch(`${unsplashProxy}?query=${drinkQuery}&per_page=1&content_filter=high`, requestOptions)
         .then(response => response.json())
-        .then(responseJson => console.log(responseJson))
+        .then(responseJson => {
+            if (responseJson.total == 0) {
+                console.log('no images found, img class stays hidden');
+            } else {
+                displayDrinkImage(responseJson)
+            }
+        })
         .catch(error => console.log('error', error));
 }
 
@@ -491,5 +526,8 @@ function userChoice() {
     });
 }
 
-$(userChoice);
+
+// ==============================  ON PAGE LOAD  ================================== 
+
 $(displayCreate);
+$(userChoice);
