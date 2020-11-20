@@ -19,3 +19,11 @@
     flex-flow: row wrap;
     justify-content: space-around;
 }
+
+.loader {
+
+}
+
+.loader-hide {
+    display: none;
+}

@@ -1,5 +1,12 @@
 'use strict';
 
+function showLoader() {
+    $('.loader').removeClass('loader-hide');
+}
+
+function hideLoader() {
+    $('.loader').addClass('loader-hide');
+}
 
 // ==============================  JSON/OBJECT/ARRAY MANIPULATION  ==================================
 // ------ drink
@@ -306,6 +313,7 @@ function displayDrinkImage(responseJson) {
 const cocktailProxy = `https://damp-brushlands-32925.herokuapp.com/cocktail`;
 // ------ drinks
 function getRandomDrink() {
+    showLoader();
     // get random drink from theCockatillDB.com
     let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
@@ -318,7 +326,10 @@ function getRandomDrink() {
 
     fetch(`${cocktailProxy}/random.php`, requestOptions)
         .then(response => response.json())
-        .then(responseJson => displayDrink(responseJson))
+        .then(responseJson => {
+            hideLoader();
+            displayDrink(responseJson);
+        })
         .catch(error => console.log('error', error));
     
 }
