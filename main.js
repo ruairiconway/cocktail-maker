@@ -70,7 +70,7 @@ function generateDrinkHTMLString() {
             <ol class="js-drink-instructions"></ol>  
         </div>
     </div>
-    <div class="drink-image js-drink-image hidden">
+    <div class="drink-image js-drink-image image-hide">
     </div>`;
     return structureString;
 }
@@ -335,6 +335,7 @@ function getRandomDrink() {
 }
 
 function getDrinkByName(name) {
+    showLoader();
     // get drink by name from theCockatillDB.com
     let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
@@ -347,12 +348,16 @@ function getDrinkByName(name) {
 
     fetch(`${cocktailProxy}/search.php?s=${name}`, requestOptions)
         .then(response => response.json())
-        .then(responseJson => displayDrink(responseJson))
+        .then(responseJson => {
+            hideLoader();
+            displayDrink(responseJson);
+        })
         .catch(error => console.log('error', error));
 }
 
 // ------ browse
 function getBrowseFilters() {
+    showLoader();
     // get ingredient filters from theCockatillDB.com
     let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
@@ -366,11 +371,15 @@ function getBrowseFilters() {
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list`, requestOptions)
     //fetch(`${cocktailProxy}/list.php?i=list`, requestOptions) <-- returns longer list of ingredients but some do not provide drink options when getFilterDrinkList() is called
         .then(response => response.json())
-        .then(responseJson => displayBrowse(responseJson))
+        .then(responseJson => {
+            hideLoader();
+            displayBrowse(responseJson);
+        })
         .catch(error => console.log('error', error));
 }
 
 function getFilterDrinkList(filterChoice) {
+    showLoader();
     // get drinks by ingredient filter from theCockatillDB.com
     let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
@@ -383,12 +392,16 @@ function getFilterDrinkList(filterChoice) {
 
     fetch(`${cocktailProxy}/filter.php?i=${filterChoice}`, requestOptions)
         .then(response => response.json())
-        .then(responseJson => displayFilterDrinkList(responseJson, filterChoice))
+        .then(responseJson => {
+            hideLoader();
+            displayFilterDrinkList(responseJson, filterChoice);
+        })
         .catch(error => console.log('error', error));
 }
 
 // ------ create
 function getCreateDrinkOptions(ingredients) {
+    showLoader();
     // get drinks by multiple ingredient filters from theCockatillDB.com
     var myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
@@ -403,6 +416,7 @@ function getCreateDrinkOptions(ingredients) {
         .then(response => response.json())
         .then(responseJson => {
             if (responseJson.drinks === 'None Found') {
+                hideLoader();
                 displayCreateError();
                 console.log('no drink found');
             } else {
@@ -411,9 +425,11 @@ function getCreateDrinkOptions(ingredients) {
         })
         .catch(error => {
             if (error = 'SyntaxError') {
+                hideLoader();
                 displayCreateError();
                 console.log('no drink found');
             } else {
+                hideLoader();
                 console.log('error', error);
             }
         });
