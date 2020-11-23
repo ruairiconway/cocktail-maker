@@ -1,19 +1,30 @@
-# Shaken-or-Stirred
+# Shaken or Stirred
 
 - live - https://ruairiconway.github.io/shaken-or-stirred/
 - code - https://github.com/ruairiconway/shaken-or-stirred
 
-## Brief
+## Assignment
 Thinkful Build - create an app that utilizes one or more APIs in an interesting way
 
-## My Build
-To create an app that provides users with cocktail recipes that match ingredients they already have + provide playlist suggestions from Spotify to help add some fun to the experience.
+## Summary
+An app that provides cocktail recipes based on what the user has in hand! The user can also search by specific ingredient via 'browse', or find a random recipe via 'random'.
 
-### Currently:
-- The basic cocktail functionality is built
-- I am awaiting an API key for the ability to use multiple ingredient searches. Currently 'create' can only search for one term via the base/free api provided.
-- Still need to implement the spotify API.
+**Using the Cocktail DB API**, this app manipulates the API in three ways.
+- Browse: lists all ingredients, which have complete recipes, that the DB uses.
+- Random: finds a random recipe.
+- Create: Pulls all recipes that match the users input, and then randomly selects from that pool to keep the app more interseting.
 
-### API reference
+**Using the Unsplash API**, this app manipulates the API in two ways.
+- Loads random image on page-load using a query, 'cocktail'.
+- Loads image when a new recipe is displayed using a query based on the cocktail name.
+
+## API reference
 - The Cocktail DB - https://www.thecocktaildb.com/api.php
-- Spotify - WIP
+- Unsplash - https://unsplash.com/developers
+
+## Technology
+- HTML
+- CSS
+- Javascript
+- JQuery
+- Node.js
