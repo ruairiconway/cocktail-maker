@@ -22,6 +22,16 @@ An app that provides cocktail recipes based on what the user has in hand! The us
 - The Cocktail DB - https://www.thecocktaildb.com/api.php
 - Unsplash - https://unsplash.com/developers
 
+## Screenshots
+### Mobile
+![Image](assets/shaken-or-stirred-browse.png)
+![Image](assets/shaken-or-stirred-drink.png)
+![Image](assets/shaken-or-stirred-create.png)
+### Desktop
+![Image](assets/shaken-or-stirred-browse-desktop.png)
+![Image](assets/shaken-or-stirred-drink-desktop.png)
+![Image](assets/shaken-or-stirred-create-desktop.png)
+
 ## Technology
 - HTML
 - CSS
