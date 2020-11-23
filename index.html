@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <!-- meta -->
     <meta charset="UTF-8">
@@ -12,32 +11,45 @@
     <link href="main.css" rel="stylesheet" type="text/css">
 </head>
 
-<body>
-    <header>
-        <h1>Shaken or Stirred</h1>
-    </header>
+<body class="flex-base">
+    <!-- APP -->
+    <div class="flex-group flex-app-section app-cocktail">
 
-    <main>
+        <header>
+            <h1>Shaken or Stirred</h1>
+        </header>
+
         <!-- NAV -->
-        <nav>
-            <input type="button" id="js-btn-create-drink" class="nav-button" value="Create">
-            <input type="button" id="js-btn-random-drink" class="nav-button" value="Random">
+        <nav class="nav">
             <input type="button" id="js-btn-browse-drink" class="nav-button" value="Browse">
+            <input type="button" id="js-btn-random-drink" class="nav-button" value="Random">
+            <input type="button" id="js-btn-create-drink" class="nav-button" value="Create">
         </nav>
-        <!-- DRINK RECIPE -->
-        <div class="drink-container container"></div>
-        
-        <!-- CREATE -->
-        <div class="create-container container"></div> 
 
-        <!-- BROWSE -->
-        <div class="browse-container container"></div>
-    </main>
-    
-    <footer>
-        <p>&#xA9; Ruairi Conway</p>
-    </footer>
+        <main class="flex-group">
+            <!-- DRINK RECIPE -->
+            <div class="flex-group drink-container container hidden"></div>
 
+            <!-- BROWSE -->
+            <div class="flex-group browse-container container hidden"></div>
+
+            <!-- CREATE -->
+            <div class="flex-group create-container container hidden"></div>
+
+            <footer>
+                <p>&#xA9;ruairiconway</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+    <!-- IMAGE -->
+    <div class="flex-app-section app-image image-hide">
+        <div class="app-item image-hide js-drink-image"></div>
+    </div>
+
+    <!-- LOADER -->
     <div class="loader loader-hide">
         <img src="assets/loader.gif">
     </div>
@@ -45,6 +57,6 @@
     <!-- scripts -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.js" crossorigin="anonymous"></script>
     <script src="main.js"></script>
-</body>
 
+</body>
 </html>
