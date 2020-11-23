@@ -308,11 +308,15 @@ footer p {
     display: none;
 }
 
+.loader-hide {
+    display: none;
+}
+
 .image-hide {
     display: none;
 }
 
-.loader-hide {
+.div-hide {
     display: none;
 }
 
@@ -335,6 +339,10 @@ footer p {
 
     .image-hide {
         display: inherit;
+    }
+
+    .div-hide {
+        display: none;
     }
 
 }

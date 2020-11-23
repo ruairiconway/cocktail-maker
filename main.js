@@ -320,6 +320,11 @@ function displayLandingImage(responseJson) {
     $('.js-drink-image').html(imageHTML);
 }
 
+function hideDiv() {
+    // hide right side image div if no image is found
+    $('.app-image').addClass('div-hide');
+}
+
 
 // ==============================  FETCH APIs  ==================================
 const cocktailProxy = `https://damp-brushlands-32925.herokuapp.com/cocktail`;
@@ -466,12 +471,18 @@ function getDrinkImage(drink) {
         .then(response => response.json())
         .then(responseJson => {
             if (responseJson.total == 0) {
-                console.log('no images found, img class stays hidden');
+                console.log('no images found, img section hidden');
+                hideDiv();
+                hideLoader();
             } else {
                 displayDrinkImage(responseJson);
+                hideLoader();
             }
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {
+            console.log('error finding image', error);
+            hideDiv();
+    });
 }
 
 function getLandingImage() {
@@ -489,7 +500,10 @@ function getLandingImage() {
             displayLandingImage(responseJson);
             hideLoader();
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {
+            console.log('error finding image', error);
+            hideDiv();
+    });
 }
 
 
