@@ -24,7 +24,9 @@ An app that provides cocktail recipes based on what the user has in hand! The us
 
 ## Screenshots
 ### Mobile
+
 | ![Image](assets/shaken-or-stirred-browse.png) | ![Image](assets/shaken-or-stirred-drink.png) | ![Image](assets/shaken-or-stirred-create.png) |
+
 ### Desktop
 ![Image](assets/shaken-or-stirred-browse-desktop.png)
 ![Image](assets/shaken-or-stirred-drink-desktop.png)
