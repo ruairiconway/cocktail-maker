@@ -17,6 +17,7 @@ An app that provides cocktail recipes based on what the user has in hand! The us
 **Using the Unsplash API**, this app manipulates the API in two ways.
 - Loads random image on page-load using a query, 'cocktail'.
 - Loads image when a new recipe is displayed using a query based on the cocktail name.
+- Note the Unsplash API currently has a call-limit of 50 as it is in the Demo stage.
 
 ## API reference
 - The Cocktail DB - https://www.thecocktaildb.com/api.php

@@ -188,7 +188,7 @@ function generateCreateHTMLString() {
     `<form id="js-create-form" autocomplete="off">
         <p>let's make you a cocktail</p>
         <label for="ingredient-field" class="create-form-label">what are you working with?</label>
-        <input type="text" class="create-form-field js-create-form-field" name="ingredient-field" required>
+        <input type="text" class="create-form-field js-create-form-field" id="ingredient-field" name="ingredient-field" required>
         <input type="submit" class="create-form-submit js-create-form-submit" value="go">
         <p id="ps">p.s. enter multiple ingredients seperated by ","</p>
     </form>
@@ -485,7 +485,10 @@ function getLandingImage() {
 
     fetch(`${unsplashProxy}/photos/random?featured&query=${drinkQuery}&content-filter=high`, requestOptions)
         .then(response => response.json())
-        .then(responseJson => displayLandingImage(responseJson))
+        .then(responseJson => {
+            displayLandingImage(responseJson);
+            hideLoader();
+        })
         .catch(error => console.log('error', error));
 }
 
