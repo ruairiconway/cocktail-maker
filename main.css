@@ -116,7 +116,7 @@ main {
 }
 
 .browse-item {
-    flex: 1 0 30%; /* explanation below */
+    flex: 1 0 30%;
     margin: 5px;
     display: flex;
     justify-content: center;
