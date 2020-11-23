@@ -1,12 +1,16 @@
 'use strict';
 
+
+// ==============================  LOADER  ==================================
 function showLoader() {
     $('.loader').removeClass('loader-hide');
+    $('body>*:not(.loader)').addClass('loading-blur');
 }
-
 function hideLoader() {
     $('.loader').addClass('loader-hide');
+    $('body>*:not(.loader)').removeClass('loading-blur');
 }
+
 
 // ==============================  JSON/OBJECT/ARRAY MANIPULATION  ==================================
 // ------ drink
@@ -60,17 +64,15 @@ function generateDrinkHTMLString() {
     <div class="drink-breakdown">
         <div id="drink-name" class="js-drink-name">   
         </div>
-        <div id="drink-details">
-            <ul class="drink-details-format js-drink-measure"></ul>
-            <ul class="drink-details-format js-drink-ingredient"></ul>
-        </div>
         <div id="drink-glass" class="js-drink-glass">
+        </div>
+        <div id="drink-details">
+            <ul class="drink-details-format drink-measure js-drink-measure"></ul>
+            <ul class="drink-details-format drink-ingredient js-drink-ingredient"></ul>
         </div>
         <div id="drink-instructions">
             <ol class="js-drink-instructions"></ol>  
         </div>
-    </div>
-    <div class="drink-image js-drink-image image-hide">
     </div>`;
     return structureString;
 }
@@ -79,7 +81,7 @@ function generateDrinkNameString(drink) {
     // Create string for drink name
     let name = drink.drinks[0].strDrink;
     let nameString = `
-        <h3>${name}</h3>`;
+        <h2>${name}</h2>`;
     return nameString
 }
 
@@ -124,7 +126,7 @@ function generateBrowseHTMLString() {
     </div>
     <div class="browse-list js-browse-list">
     </div>
-    <div class="back-button js-back-button">
+    <div class="back-button js-back-button hidden">
     </div>`;
     return structureString
 }
@@ -161,22 +163,20 @@ function generateDrinkListString(drinkList) {
 function generateBrowseFilterHeader() {
     // Header string for browse ingredient list
     let headerString = `
-    <h3>Ingredients List</h3>`;
+    <h2>ingredients</h2>`;
     return headerString
 }
 
 function generateBrowseDrinksHeader(filterChoice) {
     // Header string for browse drink list
     let headerString = `
-    <h3>${filterChoice}</h3>`;
+    <h2>ingredients > ${filterChoice}</h2>`;
     return headerString
 }
 
 function generateBackButtonString() {
     let backButtonString = `
-    <div>
-        <input type=button value="back" id="back-button">
-    </div>`;
+    <input type="button" value="back" id="back-button-browse">`;
     return backButtonString
 }
 
@@ -186,14 +186,13 @@ function generateCreateHTMLString() {
     // base create html
     let createString = 
     `<form id="js-create-form" autocomplete="off">
-        <label for="ingredient-field" class="create-form-label">What are you working with?</label>
-        <input type="text" class="js-create-form-field" id="js-create-form-field" name="ingredient-field" required>
-        <input type="submit" class="js-create-form-submit" value="go">
+        <p>let's make you a cocktail</p>
+        <label for="ingredient-field" class="create-form-label">what are you working with?</label>
+        <input type="text" class="create-form-field js-create-form-field" name="ingredient-field" required>
+        <input type="submit" class="create-form-submit js-create-form-submit" value="go">
+        <p id="ps">p.s. enter multiple ingredients seperated by ","</p>
     </form>
-    <div>
-        <p>enter multiple ingredients seperated by a ","</p>
-    </div>
-    <div id="error-message"></div>`;
+    <div id="error-message" class="hidden"></div>`;
     return createString
 }
 
@@ -244,6 +243,7 @@ function displayDrinkComponents(drink) {
 }
 
 function displayDrinkGlass(drink) {
+    // Display drink glass type
     let glassString = generateDrinkGlassString(drink);
     $('.js-drink-glass').html(glassString)
 }
@@ -256,13 +256,14 @@ function displayDrinkInstructions(drink) {
 
 // ------ browse
 function buildBrowseHTML() {
-    // Create base HTML structure after resetDisplay()
+    // Create base HTML structure after display resets
     let browseHTML = generateBrowseHTMLString();
     $('.browse-container').html(browseHTML);
 }
 
 function displayBrowseFilters(filters) {
     // Display ingredient filters
+    window.scrollTo(0,0);
     let filterArray = createBrowseFilterArray(filters);
     let filterString = generateBrowseFilterString(filterArray);
     let filterHeader = generateBrowseFilterHeader();
@@ -272,12 +273,13 @@ function displayBrowseFilters(filters) {
 
 function displayFilterDrinkList(drinkList, filterChoice) {
     // Display drinks filtered by chosen ingredient
+    window.scrollTo(0,0);
     let drinkListString =  generateDrinkListString(drinkList);
     let drinkListHeader = generateBrowseDrinksHeader(filterChoice);
     let backButton = generateBackButtonString();
     $('.js-browse-list').html(drinkListString);
     $('.js-browse-header').html(drinkListHeader);
-    $('.js-back-button').html(backButton);
+    $('.js-back-button').removeClass('hidden').html(backButton);
     watchFilterDrinkChoice();
 }
 
@@ -287,7 +289,7 @@ function buildCreateHTML() {
     // Create base HTML structure after resetDisplay()
     let createHTML = generateCreateHTMLString();
     $('.create-container').html(createHTML);
-    $('#js-create-form-field').focus();
+    $('.js-create-form-field').focus();
     watchCreateForm();
 }
 
@@ -295,17 +297,27 @@ function displayCreateError() {
     // display error message when no drinks are found
     console.log('connected');
     let createError = generateCreateErrorString();
-    $('#error-message').html(createError);
+    $('#error-message').html(createError).removeClass('hidden');
 }
 
 
 // ----- image
 function displayDrinkImage(responseJson) {
+    // display drink image based on cocktail name
     console.log(responseJson);
     let imageURL = responseJson.results[0].urls.regular;
     let imageAlt = responseJson.results[0].alt_description;
     let imageHTML = generateImageString(imageURL,imageAlt);
-    $('.js-drink-image').removeClass('hidden').html(imageHTML);
+    $('.js-drink-image').html(imageHTML);
+}
+
+function displayLandingImage(responseJson) {
+    // display landing image
+    console.log(responseJson);
+    let imageURL = responseJson.urls.regular;
+    let imageAlt = responseJson.alt_description;
+    let imageHTML = generateImageString(imageURL,imageAlt);
+    $('.js-drink-image').html(imageHTML);
 }
 
 
@@ -369,7 +381,7 @@ function getBrowseFilters() {
     };
 
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list`, requestOptions)
-    //fetch(`${cocktailProxy}/list.php?i=list`, requestOptions) <-- returns longer list of ingredients but some do not provide drink options when getFilterDrinkList() is called
+    //fetch(`${cocktailProxy}/list.php?i=list`, requestOptions) <= returns longer list of ingredients but some do not provide drink options when getFilterDrinkList() is called
         .then(response => response.json())
         .then(responseJson => {
             hideLoader();
@@ -403,10 +415,10 @@ function getFilterDrinkList(filterChoice) {
 function getCreateDrinkOptions(ingredients) {
     showLoader();
     // get drinks by multiple ingredient filters from theCockatillDB.com
-    var myHeaders = new Headers();
+    let myHeaders = new Headers();
     myHeaders.append("Cookie", "__cfduid=dfc5bf3d33e7c71b03778d3a76ab84efc1605125130");
 
-    var requestOptions = {
+    let requestOptions = {
         method: 'GET',
         headers: myHeaders,
         redirect: 'follow'
@@ -438,54 +450,87 @@ function getCreateDrinkOptions(ingredients) {
 // ----- image
 const unsplashProxy = `https://damp-brushlands-32925.herokuapp.com/unsplash`;
 
-function getDrinkImageUrl(drink) {
+function getDrinkImage(drink) {
     // get image based on drink name
     let drinkName = drink.drinks[0].strDrink;
     let drinkQuery = drinkName.replaceAll(' ','+');
 
     console.log(`fetching images using ${drinkQuery}`);
 
-    var requestOptions = {
+    let requestOptions = {
         method: 'GET',
         redirect: 'follow'
     };
     
-    fetch(`${unsplashProxy}?query=${drinkQuery}&per_page=1&content_filter=high`, requestOptions)
+    fetch(`${unsplashProxy}/search/photos?query=${drinkQuery}&per_page=1&content_filter=high`, requestOptions)
         .then(response => response.json())
         .then(responseJson => {
             if (responseJson.total == 0) {
                 console.log('no images found, img class stays hidden');
             } else {
-                displayDrinkImage(responseJson)
+                displayDrinkImage(responseJson);
             }
         })
         .catch(error => console.log('error', error));
 }
 
+function getLandingImage() {
+    //get random cocktail image
+    let drinkQuery = 'cocktail';
+
+    let requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+    };
+
+    fetch(`${unsplashProxy}/photos/random?featured&query=${drinkQuery}&content-filter=high`, requestOptions)
+        .then(response => response.json())
+        .then(responseJson => displayLandingImage(responseJson))
+        .catch(error => console.log('error', error));
+}
+
 
 // ==============================  DISPLAY HANDLERS  ==================================
-// ------ reset
-function resetDisplay() {
+// ------ reset/hide
+function resetDisplayForDrink() {
+    // show drink, hide others
     $('.drink-container').empty();
+    $('.drink-container').removeClass('hidden');
+    $('.browse-container').addClass('hidden');
+    $('.create-container').addClass('hidden');
+}
+
+function resetDisplayForBrowse() {
+    // show browse, hide others
     $('.browse-container').empty();
+    $('.browse-container').removeClass('hidden');
+    $('.drink-container').addClass('hidden');
+    $('.create-container').addClass('hidden');
+}
+
+function resetDisplayForCreate() {
+    // show create, hide others
     $('.create-container').empty();
+    $('.create-container').removeClass('hidden');
+    $('.drink-container').addClass('hidden');
+    $('.browse-container').addClass('hidden');
 }
 
 // ------ drink
 function displayDrink(drink) {
-    resetDisplay();
+    resetDisplayForDrink();
     buildDrinkHTML();
     displayDrinkName(drink);
     displayDrinkComponents(drink);
     displayDrinkGlass(drink);
     displayDrinkInstructions(drink);
-    getDrinkImageUrl(drink);
+    getDrinkImage(drink);
 }
 
 // ------ browse
 function displayBrowse(filters) {
     console.log(filters);
-    resetDisplay();
+    resetDisplayForBrowse();
     buildBrowseHTML();
     displayBrowseFilters(filters);
     watchFilterChoice();
@@ -493,7 +538,7 @@ function displayBrowse(filters) {
 
 // ------ create
 function displayCreate() {
-    resetDisplay();
+    resetDisplayForCreate();
     buildCreateHTML();
 }
 
@@ -501,7 +546,7 @@ function displayCreate() {
 // ==============================  WATCH INPUT/FORM  ================================== 
 // ------ browse
 function watchFilterChoice() {
-    // browse ingredients
+    // watch user-interactions for browse ingredients
     $('.js-filter-button').on('click', function(){
         console.log('getting drinks by ingredient filter');
         let filterChoice = $(this).val();
@@ -510,7 +555,7 @@ function watchFilterChoice() {
 }
 
 function watchFilterDrinkChoice() {
-    // browse drinks
+    // watch user-interactions for browse drink choice
     $('.js-drink-button').on('click', function(){
         console.log('getting selected drink');
         let drinkChoice = $(this).val();
@@ -524,9 +569,10 @@ function watchFilterDrinkChoice() {
 
 // ------ create
 function watchCreateForm() {
+    // watch user-interactions for create form
     $('#js-create-form').submit(event => {
         event.preventDefault();
-        $('#error-message').empty();
+        $('#error-message').empty().addClass('hidden');
         let ingredientsInput = $('.js-create-form-field').val();
         let ingredients = ingredientsInput.replaceAll(', ',',');
         console.log(`getting random drink using ${ingredients}`);
@@ -536,6 +582,7 @@ function watchCreateForm() {
 
 // ------ nav
 function userChoice() {
+    //watch user-interactions for nav
     // hit create
     $('#js-btn-create-drink').on('click', function(){
         console.log('setting up create');
@@ -556,5 +603,6 @@ function userChoice() {
 
 // ==============================  ON PAGE LOAD  ================================== 
 
-$(displayCreate);
-$(userChoice);
+$(displayCreate); // display create forms
+$(userChoice); // setup for nav interactions
+$(getLandingImage); // get landing image
