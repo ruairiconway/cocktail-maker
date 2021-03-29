@@ -3,8 +3,8 @@
 - live - https://ruairiconway.github.io/shaken-or-stirred/
 - code - https://github.com/ruairiconway/shaken-or-stirred
 
-## Assignment
-Thinkful Build - create an app that utilizes one or more APIs in an interesting way
+## Brief
+Create an app that utilizes one or more APIs in an interesting way
 
 ## Summary
 An app that provides cocktail recipes based on what the user has in hand! The user can also search by specific ingredient via 'browse', or find a random recipe via 'random'.
