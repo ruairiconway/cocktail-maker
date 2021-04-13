@@ -147,7 +147,6 @@ function generateBrowseFilterString(filterArray) {
 
 function generateDrinkListString(drinkList) {
     // Browse drink list string
-    console.log(drinkList);
     let drinkListString = ``;
     for (let i = 0; i < drinkList.drinks.length; i++) {
         let item =`
@@ -229,7 +228,6 @@ function displayDrinkName(drink) {
 
 function displayDrinkComponents(drink) {
     let drinkData = drink.drinks[0];
-    console.log(drinkData);
     // Display drink measure list
     let measureTargetKey = 'strMeasure';
     let measureList = createDrinkComponentArray(drinkData, measureTargetKey);
@@ -295,7 +293,6 @@ function buildCreateHTML() {
 
 function displayCreateError() {
     // display error message when no drinks are found
-    console.log('connected');
     let createError = generateCreateErrorString();
     $('#error-message').html(createError).removeClass('hidden');
 }
@@ -304,7 +301,6 @@ function displayCreateError() {
 // ----- image
 function displayDrinkImage(responseJson) {
     // display drink image based on cocktail name
-    console.log(responseJson);
     let imageURL = responseJson.results[0].urls.regular;
     let imageAlt = responseJson.results[0].alt_description;
     let imageHTML = generateImageString(imageURL,imageAlt);
@@ -313,7 +309,6 @@ function displayDrinkImage(responseJson) {
 
 function displayLandingImage(responseJson) {
     // display landing image
-    console.log(responseJson);
     let imageURL = responseJson.urls.regular;
     let imageAlt = responseJson.alt_description;
     let imageHTML = generateImageString(imageURL,imageAlt);
@@ -435,7 +430,6 @@ function getCreateDrinkOptions(ingredients) {
             if (responseJson.drinks === 'None Found') {
                 hideLoader();
                 displayCreateError();
-                console.log('no drink found');
             } else {
                 getCreateDrink(responseJson);
             }
@@ -460,8 +454,6 @@ function getDrinkImage(drink) {
     let drinkName = drink.drinks[0].strDrink;
     let drinkQuery = drinkName.replaceAll(' ','+');
 
-    console.log(`fetching images using ${drinkQuery}`);
-
     let requestOptions = {
         method: 'GET',
         redirect: 'follow'
@@ -471,7 +463,6 @@ function getDrinkImage(drink) {
         .then(response => response.json())
         .then(responseJson => {
             if (responseJson.total == 0) {
-                console.log('no images found, img section hidden');
                 hideDiv();
                 hideLoader();
             } else {
@@ -546,7 +537,6 @@ function displayDrink(drink) {
 
 // ------ browse
 function displayBrowse(filters) {
-    console.log(filters);
     resetDisplayForBrowse();
     buildBrowseHTML();
     displayBrowseFilters(filters);
@@ -565,7 +555,6 @@ function displayCreate() {
 function watchFilterChoice() {
     // watch user-interactions for browse ingredients
     $('.js-filter-button').on('click', function(){
-        console.log('getting drinks by ingredient filter');
         let filterChoice = $(this).val();
         getFilterDrinkList(filterChoice);
     });
@@ -574,12 +563,10 @@ function watchFilterChoice() {
 function watchFilterDrinkChoice() {
     // watch user-interactions for browse drink choice
     $('.js-drink-button').on('click', function(){
-        console.log('getting selected drink');
         let drinkChoice = $(this).val();
         getDrinkByName(drinkChoice);
     });
     $('.js-back-button').on('click', function(){
-        console.log('setting up browse');
         getBrowseFilters();
     });
 }
@@ -592,7 +579,6 @@ function watchCreateForm() {
         $('#error-message').empty().addClass('hidden');
         let ingredientsInput = $('.js-create-form-field').val();
         let ingredients = ingredientsInput.replaceAll(', ',',');
-        console.log(`getting random drink using ${ingredients}`);
         getCreateDrinkOptions(ingredients);
     });
 }
@@ -602,17 +588,14 @@ function userChoice() {
     //watch user-interactions for nav
     // hit create
     $('#js-btn-create-drink').on('click', function(){
-        console.log('setting up create');
         displayCreate();
     });
     // hit random
     $('#js-btn-random-drink').on('click', function(){
-        console.log('getting random drink');
         getRandomDrink();
     });
     // hit browse
     $('#js-btn-browse-drink').on('click', function(){
-        console.log('setting up browse');
         getBrowseFilters();
     });
 }
